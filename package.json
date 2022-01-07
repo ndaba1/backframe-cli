@@ -1,7 +1,7 @@
 {
   "name": "@backframe/cli",
   "version": "1.0.0",
-  "description": "The backframe cli",
+  "description": "The official cli for bootstrapping backframe based projects",
   "main": "src/index.js",
   "bin": {
     "bf": "bin/bf"

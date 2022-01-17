@@ -6,7 +6,7 @@ program.version("1.0.0").description("The version of the backframe cli");
 program
   .command("new <app-name>")
   .alias("n")
-  .description("Creates a new backframe project")
+  .description("Creates a new backframe project in current directory")
   .option("-p, --preset <presetName>", "Pass the path to custom bf-config.json")
   .option("-d, --default", "Skip prompts and use default preset")
   .option("-g, --git ", "Initialize the project with git")
@@ -18,7 +18,9 @@ program
 
 program
   .command("start")
-  .description("Start the backframe server on port 9000")
+  .description(
+    "Starts the backframe server present in the current directory on port 9000"
+  )
   .action(() => {
     console.log("Starting the server...");
   });

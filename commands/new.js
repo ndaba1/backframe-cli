@@ -8,6 +8,13 @@ import chalk from "chalk";
 const access = promisify(fs.access);
 const copy = promisify(ncp);
 
+// @TODO: create new folder with given name, handle errors appropriately
+// @TODO: run git init once prompts complete
+// @TODO: run npm init -y once git done
+// @TODO: check for package manager to use
+// @TODO: add dependencies to use for backframe
+// @TODO: generate/copy files
+// @TODO: run completion hooks
 async function promptForOptions(options) {
   const questions = [];
   questions.push({

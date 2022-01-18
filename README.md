@@ -1,6 +1,7 @@
 # The official cli for bootstrapping backframe based projects
 
-Backframe is an open-source project by [S.M.A.R.T Industries](https://smartindustries.io) for easily developing and deploying API(s) all from a web interface without having to write any code.
+Backframe is an open-source project for easily developing and deploying API(s) all from a web interface without necessarily having to write any code yourself.
+
 ---
 
 Get started by installing the backframe cli:

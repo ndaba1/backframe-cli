@@ -8,13 +8,13 @@ import chalk from "chalk";
 const access = promisify(fs.access);
 const copy = promisify(ncp);
 
-// @TODO: create new folder with given name, handle errors appropriately
-// @TODO: run git init once prompts complete
-// @TODO: run npm init -y once git done
-// @TODO: check for package manager to use
-// @TODO: add dependencies to use for backframe
-// @TODO: generate/copy files
-// @TODO: run completion hooks
+// TODO: create new folder with given name, handle errors appropriately
+// TODO: run git init once prompts complete
+// TODO: run npm init -y once git done
+// TODO: check for package manager to use
+// TODO: add dependencies to use for backframe
+// TODO: generate/copy files
+// TODO: run completion hooks
 async function promptForOptions(options) {
   const questions = [];
   questions.push({
@@ -44,6 +44,18 @@ async function promptForOptions(options) {
 
 export async function create(projectName, options) {
   // TODO: install package-name-validator for npm and validate the name
+
+  if (!projectName) {
+    const answer = await inquirer.prompt([
+      {
+        name: "app-name",
+        type: "input",
+        message: `What name would you like to use for the project?`,
+      },
+    ]);
+    projectName = answer["app-name"];
+  }
+
   const directory = options.cwd || process.cwd();
   const current = projectName === ".";
   const targetDir = path.resolve(directory, projectName || ".");

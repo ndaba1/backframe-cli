@@ -17,7 +17,15 @@ program
   });
 
 program
-  .command("start")
+  .command("serve")
+  .option(
+    "-p, --port <portNumber>",
+    "Pass the custom port number to start the server on"
+  )
+  .option(
+    "-o, --open",
+    "Open the server address in a browser window, default is false"
+  )
   .description(
     "Starts the backframe server present in the current directory on port 9000"
   )
@@ -26,7 +34,7 @@ program
   });
 
 export async function start(rawArgs) {
-  const enhanceErrorMessages = require("../lib/util/enhanceErrorMessages");
+  const { enhanceErrorMessages } = require("../lib/util/handleErrors");
 
   enhanceErrorMessages("missingArgument", (argName) => {
     return `Missing required argument ${chalk.yellow(`<${argName}>`)}.`;

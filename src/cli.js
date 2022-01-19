@@ -45,8 +45,6 @@ program.on("--help", () => {
   );
 });
 
-program.commands.forEach((c) => c.on("--help", () => console.log()));
-
 export async function start(rawArgs) {
   const { enhanceErrorMessages } = require("../lib/util/handleErrors");
 
@@ -54,9 +52,9 @@ export async function start(rawArgs) {
     return `Missing required argument ${chalk.yellow(`<${argName}>`)}.`;
   });
 
-  enhanceErrorMessages("unknownCommand", (optionName) => {
-    return `You have passed an unknown option .`;
-  });
+  // enhanceErrorMessages("unknownCommand", (optionName) => {
+  //   return `You have passed an unknown option .`;
+  // });
 
   program.parse(rawArgs);
 }

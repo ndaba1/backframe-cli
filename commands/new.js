@@ -4,6 +4,7 @@ import path from "path";
 import { promisify } from "util";
 import inquirer from "inquirer";
 import chalk from "chalk";
+import { getPromptModules } from "../lib/util/promptModules";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -16,32 +17,6 @@ const copy = promisify(ncp);
 // TODO: generate/copy files
 // TODO: run completion hooks
 // TODO: transfer prompt functionality into its own module
-async function promptForOptions(options) {
-  const questions = [];
-  questions.push({
-    type: "checkbox",
-    name: "APIs",
-    message: "What API(s) would you like to implement?",
-    choices: ["GraphQL", "REST", "RPC", "SOAP"],
-  });
-
-  questions.push({
-    type: "list",
-    name: "Database",
-    message: "Select a database:",
-    choices: ["MongoDB", "MariaDB", "MySQL", "Redis", "Elasticsearch"],
-    default: "MongoDB",
-  });
-
-  questions.push({
-    type: "confirm",
-    name: "Firebase",
-    message: "Would you connect your project with firebase?",
-  });
-
-  const answers = await inquirer.prompt(questions);
-  console.log(answers);
-}
 
 export async function create(projectName, options) {
   if (!projectName) {
@@ -97,5 +72,17 @@ export async function create(projectName, options) {
       fs.rm(targetDir, { recursive: true, force: true });
     }
   }
-  await promptForOptions(options);
+  await resolvePrompts();
+}
+
+async function resolvePrompts() {
+  const questions = [];
+
+  const modules = getPromptModules();
+  modules.forEach((m) => {
+    questions.push(m());
+  });
+
+  const answers = await inquirer.prompt(questions);
+  console.log(answers);
 }

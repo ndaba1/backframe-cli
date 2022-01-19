@@ -24,16 +24,17 @@ program
   )
   .option(
     "-o, --open",
-    "Open the server address in a browser window, default is false"
+    "Open the backframe admin dashboard in a browser window, default is false"
   )
   .description(
-    "Starts the backframe server present in the current directory on port 9000"
+    "Starts the backframe server present in the current directory on port 9000 or a custom specified port"
   )
   .action((args, cmd) => {
     const PORT = args.port || 9000;
     console.log(
       `${chalk.green.bold(`🚀 Starting the server on port: ${PORT}....`)}`
     );
+    console.log(cmd);
   });
 
 program.on("--help", () => {

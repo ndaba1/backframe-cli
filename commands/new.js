@@ -19,6 +19,7 @@ const copy = promisify(ncp);
 // TODO: transfer prompt functionality into its own module
 
 export async function create(projectName, options) {
+  console.log(options);
   if (!projectName) {
     const { appName } = await inquirer.prompt([
       {
@@ -51,28 +52,33 @@ export async function create(projectName, options) {
   }
 
   if (fs.existsSync(targetDir)) {
-    const { action } = await inquirer.prompt([
-      {
-        name: "action",
-        type: "list",
-        message: `Target directory ${chalk.redBright.bold(
-          targetDir
-        )} already exists. Pick an action:`,
-        choices: [
-          { name: "Overwrite", value: "overwrite" },
-          // { name: "Merge", value: "merge" },
-          { name: "Cancel", value: false },
-        ],
-      },
-    ]);
-    if (!action) {
-      return;
-    } else if (action === "overwrite") {
-      console.log(`\n${chalk.green.dim(`Removing ${targetDir}...`)}\n`);
+    if (options.force) {
       fs.rm(targetDir, { recursive: true, force: true });
+    } else {
+      const { action } = await inquirer.prompt([
+        {
+          name: "action",
+          type: "list",
+          message: `Target directory ${chalk.redBright.bold(
+            targetDir
+          )} already exists. Pick an action:`,
+          choices: [
+            { name: "Overwrite", value: "overwrite" },
+            { name: "Cancel", value: false },
+          ],
+        },
+      ]);
+      if (!action) {
+        return;
+      } else if (action === "overwrite") {
+        console.log(`\n${chalk.green.dim(`Removing ${targetDir}...`)}\n`);
+        fs.rm(targetDir, { recursive: true, force: true });
+      }
     }
   }
-  await resolvePrompts();
+  const cfg = await resolvePrompts();
+  console.log(cfg);
+  // initializeProject(projectName, targetDir, options);
 }
 
 async function resolvePrompts() {
@@ -80,9 +86,18 @@ async function resolvePrompts() {
 
   const modules = getPromptModules();
   modules.forEach((m) => {
-    questions.push(m());
+    // FIXME: Implement a better way to check if the return value is an array
+    if (m().length) questions.push(...m());
+    else questions.push(m());
   });
 
   const answers = await inquirer.prompt(questions);
-  console.log(answers);
+  return answers;
+}
+
+async function initializeProject(name, dest, ctx) {
+  // TODO: Resolve presets
+  if (ctx.preset) {
+    console.log("object");
+  }
 }

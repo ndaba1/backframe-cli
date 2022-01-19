@@ -38,48 +38,60 @@ export async function create(projectName, options) {
   const current = projectName === ".";
   const targetDir = path.join(directory, projectName || ".");
 
-  if (current) {
-    const { inCurrent } = await inquirer.prompt([
-      {
-        name: "inCurrent",
-        type: "confirm",
-        message: `Generate project in current directory: ${chalk.redBright.bold(
-          targetDir
-        )}`,
-      },
-    ]);
-
-    if (!inCurrent) return;
-  }
-
   if (fs.existsSync(targetDir)) {
     if (options.force) {
       fs.rm(targetDir, { recursive: true, force: true });
     } else {
-      const { action } = await inquirer.prompt([
-        {
-          name: "action",
-          type: "list",
-          message: `Target directory ${chalk.redBright.bold(
-            targetDir
-          )} already exists. Pick an action:`,
-          choices: [
-            { name: "Overwrite", value: "overwrite" },
-            { name: "Cancel", value: false },
-          ],
-        },
-      ]);
-      if (!action) {
-        return;
-      } else if (action === "overwrite") {
-        console.log(`\n${chalk.green.dim(`Removing ${targetDir}...`)}\n`);
-        fs.rmSync(targetDir, { recursive: true, force: true });
+      if (current) {
+        const { inCurrent } = await inquirer.prompt([
+          {
+            name: "inCurrent",
+            type: "confirm",
+            message: `Generate project in current directory: ${chalk.blue.bold(
+              targetDir
+            )}`,
+          },
+        ]);
+
+        if (!inCurrent) return;
+      } else {
+        const { action } = await inquirer.prompt([
+          {
+            name: "action",
+            type: "list",
+            message: `Target directory ${chalk.blue.bold(
+              targetDir
+            )} already exists. Pick an action:`,
+            choices: [
+              { name: "Overwrite", value: "overwrite" },
+              { name: "Cancel", value: false },
+            ],
+          },
+        ]);
+        if (!action) {
+          return;
+        } else if (action === "overwrite") {
+          console.log(`\n${chalk.green.dim(`Removing ${targetDir}...`)}\n`);
+          fs.rmSync(targetDir, { recursive: true, force: true });
+        }
       }
     }
   }
-  const cfg = await resolvePrompts();
 
-  // Save backframe.json file
+  let cfg;
+
+  if (options.default) {
+    cfg = {
+      apis: "rest",
+      database: "mongodb",
+      "auth-providers": "email-local",
+      internals: "analytics",
+    };
+  } else {
+    cfg = await resolvePrompts();
+  }
+
+  // Save bfconfig.json file
   if (cfg.SavePreset) {
     delete cfg.SavePreset;
     writeFiles(targetDir, { "bfconfig.json": JSON.stringify(cfg, null, 2) });

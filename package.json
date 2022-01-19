@@ -4,12 +4,15 @@
   "description": "The official cli for bootstrapping backframe based projects",
   "main": "src/index.js",
   "bin": {
-    "bf": "bin/bf"
+    "bf": "bin/bf",
+    "@backframe/cli": "bin/bf"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "bf", "backframe", "api", "rest", "graphql", "rpc", "server", "backend", "framework"
+  ],
   "author": "Victor Ndaba",
   "license": "MIT",
   "dependencies": {

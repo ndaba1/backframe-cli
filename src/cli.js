@@ -38,11 +38,22 @@ program
   });
 
 program.on("--help", () => {
+  console.log();
   console.log(
-    `\nRun ${chalk.cyan(
+    `  Run ${chalk.cyan(
       `bf <command> --help`
-    )} for detailed usage of given command.\n`
+    )} for detailed usage of given command.`
   );
+  console.log();
+});
+
+program.commands.forEach((c) => c.on("--help", () => console.log()));
+
+program.arguments("<command>").action((cmd) => {
+  program.outputHelp();
+  console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`));
+  console.log();
+  // suggestCommands(cmd);
 });
 
 export async function start(rawArgs) {
@@ -52,9 +63,16 @@ export async function start(rawArgs) {
     return `Missing required argument ${chalk.yellow(`<${argName}>`)}.`;
   });
 
-  // enhanceErrorMessages("unknownCommand", (optionName) => {
-  //   return `You have passed an unknown option .`;
-  // });
+  enhanceErrorMessages("unknownOption", (optionName) => {
+    return `Unknown option ${chalk.yellow(optionName)}.`;
+  });
+
+  enhanceErrorMessages("optionMissingArgument", (option, flag) => {
+    return (
+      `Missing required argument for option ${chalk.yellow(option.flags)}` +
+      (flag ? `, got ${chalk.yellow(flag)}` : ``)
+    );
+  });
 
   program.parse(rawArgs);
 }

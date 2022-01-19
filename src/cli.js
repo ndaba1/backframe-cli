@@ -1,7 +1,7 @@
 import program from "commander";
 import chalk from "chalk";
 
-program.version("1.0.0").description("The version of the backframe cli");
+program.version("1.0.0").description("The official backframe cli");
 
 program
   .command("new <app-name>")
@@ -29,15 +29,32 @@ program
   .description(
     "Starts the backframe server present in the current directory on port 9000"
   )
-  .action(() => {
-    console.log("Starting the server...");
+  .action((args, cmd) => {
+    const PORT = args.port || 9000;
+    console.log(
+      `${chalk.green.bold(`🚀 Starting the server on port: ${PORT}....`)}`
+    );
   });
+
+program.on("--help", () => {
+  console.log(
+    `\nRun ${chalk.cyan(
+      `bf <command> --help`
+    )} for detailed usage of given command.\n`
+  );
+});
+
+program.commands.forEach((c) => c.on("--help", () => console.log()));
 
 export async function start(rawArgs) {
   const { enhanceErrorMessages } = require("../lib/util/handleErrors");
 
   enhanceErrorMessages("missingArgument", (argName) => {
     return `Missing required argument ${chalk.yellow(`<${argName}>`)}.`;
+  });
+
+  enhanceErrorMessages("unknownCommand", (optionName) => {
+    return `You have passed an unknown option .`;
   });
 
   program.parse(rawArgs);

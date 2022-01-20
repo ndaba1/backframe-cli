@@ -87,6 +87,21 @@ export async function create(projectName, options) {
       "auth-providers": "email-local",
       internals: "analytics",
     };
+  } else if (options.preset) {
+    try {
+      await access(options.preset, fs.constants.R_OK);
+    } catch (e) {
+      console.log(
+        `${chalk.red(
+          `An error occurred when trying to load preset: ${chalk.yellow(
+            options.preset
+          )}`
+        )}`
+      );
+      console.log(e.message);
+      return;
+    }
+    cfg = JSON.parse(fs.readFileSync(options.preset).toString());
   } else {
     cfg = await resolvePrompts();
   }
@@ -106,7 +121,11 @@ export async function create(projectName, options) {
 
   await tasks.run();
 
-  console.log("%s Project Done", chalk.green.bold("DONE"));
+  console.log();
+  console.log(
+    `  🎉  Successfully created project ${chalk.yellow(targetDir)}.\n`
+  );
+
   return true;
 }
 
@@ -155,41 +174,33 @@ function resolveDependencies(options) {
   return [deps, devDeps];
 }
 
-async function initializeProject(name, dest, ctx, preset = null) {
-  if (!preset) {
-    // Prompts were skipped
-    if (false) {
-      // TODO: Resolve deps from bfconfig.json
-      console.log("object");
-    }
-  } else {
-    // Features entered manually
-    const [deps, devDeps] = resolveDependencies(preset);
+async function initializeProject(name, dest, ctx, preset) {
+  // Features entered manually
+  const [deps, devDeps] = resolveDependencies(preset);
 
-    const pkg = {
-      name,
-      version: "0.1.0",
-      private: true,
-      dependecies: {},
-      devDependencies: {},
-    };
+  const pkg = {
+    name,
+    version: "0.1.0",
+    private: true,
+    dependecies: {},
+    devDependencies: {},
+  };
 
-    deps.forEach((dep) => {
-      const version = dep.version || "latest";
-      const name = dep.name;
+  deps.forEach((dep) => {
+    const version = dep.version || "latest";
+    const name = dep.name;
 
-      pkg.dependecies[name] = version;
-    });
+    pkg.dependecies[name] = version;
+  });
 
-    devDeps.forEach((dep) => {
-      const version = dep.version || "latest";
-      const name = dep.name;
+  devDeps.forEach((dep) => {
+    const version = dep.version || "latest";
+    const name = dep.name;
 
-      pkg.devDependencies[name] = version;
-    });
-    // Write package.json
-    writeFiles(dest, {
-      "package.json": JSON.stringify(pkg, null, 2),
-    });
-  }
+    pkg.devDependencies[name] = version;
+  });
+  // Write package.json
+  writeFiles(dest, {
+    "package.json": JSON.stringify(pkg, null, 2),
+  });
 }

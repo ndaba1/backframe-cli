@@ -7,7 +7,7 @@ program
   .command("new <app-name>")
   .alias("n")
   .description("Creates a new backframe project in current directory")
-  .option("-p, --preset <presetName>", "Pass the path to custom bf-config.json")
+  .option("-p, --preset <presetPath>", "Pass the path to custom bfconfig.json")
   .option("-d, --default", "Skip prompts and use default preset")
   .option("-g, --git ", "Initialize the project with git")
   .option("-n, --no-git", "Skip git initialization")

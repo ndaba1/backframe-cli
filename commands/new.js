@@ -36,9 +36,19 @@ export async function create(projectName, options) {
     projectName = appName;
   }
 
-  const result = validateProjectName(projectName);
+  // Set git to be true by default
+  options = {
+    ...options,
+    git: true,
+  };
+  const directory = options.cwd || process.cwd();
+  const current = projectName === ".";
+  const name = current ? path.relative("../", directory) : projectName;
+  const targetDir = path.join(directory, projectName || ".");
+
+  const result = validateProjectName(name);
   if (!result.validForNewPackages) {
-    console.error(chalk.red(`Invalid project name: "${projectName}"`));
+    console.error(chalk.red(`Invalid project name: "${name}"`));
     result.errors &&
       result.errors.forEach((err) => {
         console.error(chalk.yellow("Error: " + err));
@@ -49,15 +59,6 @@ export async function create(projectName, options) {
       });
     process.exit(1);
   }
-
-  // Set git to be true by default
-  options = {
-    ...options,
-    git: true,
-  };
-  const directory = options.cwd || process.cwd();
-  const current = projectName === ".";
-  const targetDir = path.join(directory, projectName || ".");
 
   if (fs.existsSync(targetDir)) {
     if (options.force) {
@@ -149,7 +150,7 @@ export async function create(projectName, options) {
   const tasks = new Listr([
     {
       title: `🌟 Creating a new project in ${chalk.green.bold(targetDir)}`,
-      task: () => initializeProject(projectName, targetDir, options, cfg),
+      task: () => initializeProject(name, targetDir, options, cfg),
     },
     {
       title: `🗃  Initializing  git repository...`,
@@ -172,7 +173,7 @@ export async function create(projectName, options) {
 
   // Some little humour
   console.log(
-    `\n${chalk.blue.bold(
+    `\n${chalk.cyan.bold(
       `Now you can build your API without going insane 😁. Happy Hacking!`
     )}`
   );
@@ -253,6 +254,31 @@ async function initializeProject(name, dest, ctx, preset) {
   // Write package.json
   writeFiles(dest, {
     "package.json": JSON.stringify(pkg, null, 2),
+  });
+
+  const bfconfig = {
+    language: "js",
+    apis: [...preset.apis],
+    middleware: {},
+    endpoints: {},
+    database: { db: preset.database, development: preset.internals.mockdb },
+    auth: {},
+    thirdPartyServices: {},
+  };
+
+  bfconfig.apis.forEach((a) => (bfconfig.endpoints[a] = {}));
+  bfconfig.auth["strategies"] = preset["auth-providers"].map((p) => ({
+    provider: p,
+    options: {},
+  }));
+  bfconfig.thirdPartyServices = preset["third-party"].map((s) => ({
+    service: s,
+    options: {},
+  }));
+
+  // write backframe.json
+  writeFiles(dest, {
+    "backframe.json": JSON.stringify(bfconfig, null, 2),
   });
 }
 

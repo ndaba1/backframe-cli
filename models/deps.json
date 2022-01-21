@@ -1,124 +1,81 @@
 {
     "backframe": {
-        "deps": [{
-            "name": "@backframe/core",
-            "version": "^0.1.0"
-        }, {
-            "name": "@backframe/dbs",
-            "version": "^0.1.0"
-        }]
+        "deps": [
+            "@backframe/core:0.1.0", "@backframe/dbs:0.1.0"
+        ]
     },
     "apis": {
         "gql": {
-            "deps": [{
-                "name": "@backframe/gql",
-                "version": "^0.1.0"
-            }]
+            "deps": ["@backframe/gql:0.1.0"]
         },
         "rest": {
-            "deps": [{
-                "name": "@backframe/rest",
-                "version": "^0.1.0"
-            }]
+            "deps": ["@backframe/rest:0.1.0"]
         },
         "rpc": {
-            "deps": [{
-                "name": "@backframe/rpc",
-                "version": "^0.1.0"
-            }]
+            "deps": ["@backframe/rpc:0.1.0"]
         },
         "soap": {
-            "deps": [{
-                "name": "@backframe/soap",
-                "version": "^0.1.0"
-            }]
+            "deps": ["@backframe/soap:0.1.0"]
         }
     },
     "database": {
         "mongodb": {
-            "deps": [{
-                "name": "mongoose",
-                "version": "^7.4.5"
-            }]
+            "deps": ["mongoose"]
         },
         "mariadb": {
-            "deps": [{
-                "name": "mariadb",
-                "version": "^7.4.5"
-            }]
+            "deps": ["mariadb"]
+        },
+        "mysql": {
+            "deps": ["mysql"]
+        },
+        "couchbase": {
+            "deps": ["nano"]
+        },
+        "redis": {
+            "deps": ["mariadb:0.1.0"]
+        },
+        "miscrosoftsql": {
+            "deps": ["mariadb:0.1.0"]
         },
         "firestore": {
-            "deps": [{
-                "name": "firebase/firestore",
-                "version": "^7.4.5"
-            }]
+            "deps": ["@firebase/firestore"]
         }
     },
     "internals": {
         "sockets": {
-            "deps": [{
-                "name": "socket.io",
-                "version": "^7.4.5"
-            }]
+            "deps": ["socket.io"]
         },
         "clustering": {
             "deps": [],
-            "devDeps": [{
-                "name": "pm2",
-                "version": "^7.4.5"
-            }]
+            "devDeps": ["pm2"]
         }
     },
     "third-party": {
         "stripe": {
-            "deps": [{
-                "name": "stripe",
-                "version": "^7.4.5"
-            }]
+            "deps": ["stripe"]
         },
         "twilio": {
-            "deps": [{
-                "name": "twilio",
-                "version": "^7.4.5"
-            }]
+            "deps": ["twilio"]
         },
         "sendgrid": {
-            "deps": [{
-                "name": "@sendgrid/mail",
-                "version": "^7.4.5"
-            }]
+            "deps": ["@sendgrid/mail"]
         },
         "firebase": {
-            "deps": [{
-                "name": "@firebase/admin",
-                "version": "^7.4.5"
-            }]
+            "deps": ["firebase"]
         }
     },
     "auth-providers": {
         "google": {
-            "deps": [{
-                "name": "passport-google-oauth2",
-                "version": "^7.4.5"
-            }]
+            "deps": ["passport-google-oauth2"]
         },
         "facebook": {
-            "deps": [{
-                "name": "passport-facebook",
-                "version": "^7.4.5"
-            }]
+            "deps": ["passport-facebook"]
         },
         "twitter": {
-            "deps": [{
-                "name": "passport-github",
-                "version": "^7.4.5"
-            }]
+            "deps": ["passport-github"]
         },
         "email-local": {
-            "deps": [{
-                "name": "passport-local",
-                "version": "^7.4.5"
-            }]
+            "deps": ["passport-local"]
         }
     },
     "devops": {

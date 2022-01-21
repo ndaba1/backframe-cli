@@ -11,7 +11,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "bf", "backframe", "api", "rest", "graphql", "rpc", "server", "backend", "framework"
+    "bf",
+    "backframe",
+    "api",
+    "rest",
+    "graphql",
+    "rpc",
+    "server",
+    "backend",
+    "framework"
   ],
   "author": "Victor Ndaba",
   "license": "MIT",
@@ -21,9 +29,12 @@
     "commander": "^8.3.0",
     "esm": "^3.2.25",
     "execa": "^5.1.1",
+    "fs-extra": "^10.0.0",
     "inquirer": "^8.2.0",
     "listr": "^0.14.3",
     "ncp": "^2.0.0",
-    "pkg-install": "^1.0.0"
+    "pkg-install": "^1.0.0",
+    "semver": "^7.3.5",
+    "validate-npm-package-name": "^3.0.0"
   }
 }

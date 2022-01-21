@@ -6,7 +6,7 @@ program.version("1.0.0").description("The official backframe cli");
 program
   .command("new <app-name>")
   .alias("n")
-  .description("Creates a new backframe project in current directory")
+  .description("Creates a new backframe project in the specified directory")
   .option("-p, --preset <presetPath>", "Pass the path to custom bfconfig.json")
   .option("-d, --default", "Skip prompts and use default preset")
   .option("-g, --git ", "Initialize the project with git")
@@ -18,6 +18,7 @@ program
 
 program
   .command("serve")
+  .alias("s")
   .option(
     "-p, --port <portNumber>",
     "Pass the custom port number to start the server on"
@@ -27,15 +28,65 @@ program
     "Open the backframe admin dashboard in a browser window, default is false"
   )
   .description(
-    "Starts the backframe server present in the current directory on port 9000 or a custom specified port"
+    "Starts the backframe server present in the working directory on port 9000 or a custom specified port"
   )
   .action((args, cmd) => {
     const PORT = args.port || 9000;
     console.log(
       `${chalk.green.bold(`🚀 Starting the server on port: ${PORT}....`)}`
     );
-    console.log(cmd);
   });
+
+program
+  .command("build")
+  .alias("b")
+  .option("-q --quiet", "Skip the prompts and build the server directly")
+  .option("-p --purge", "Build the server and remove every trace of backframe")
+  .description(
+    "Builds the server, removing abstractions offered by backframe and replacing them with the actual boilerplate"
+  );
+
+program
+  .command("watch")
+  .alias("w")
+  .option(
+    "-p, --port <portNumber>",
+    "Pass the custom port number to start the server on"
+  )
+  .option(
+    "-e, --exclude [files]",
+    "Pass a list of files not to watch for changes"
+  )
+  .description(
+    "Starts the backframe server in watch mode, restarting whenever changes are detected"
+  )
+  .action((args, cmd) => {
+    console.log(args);
+  });
+
+program
+  .command("add <type> <package-name> [pluginOptions]")
+  .alias("a")
+  .allowUnknownOption()
+  .description(
+    "Installs and invokes a plugin/middleware to an existing server using bf-cli"
+  )
+  .action((type, pkgName, cmd) => {
+    require("../commands/add")(type, pkgName, cmd);
+  });
+
+program
+  .command("deploy [deployOptions]")
+  .alias("d")
+  .allowUnknownOption()
+  .description(
+    "Deploys your server using the configuration passed in the .backframerc"
+  )
+  .action((args, cmd) => {
+    console.log(args);
+  });
+
+program.command("generate <resource> [apiOptions]").alias("g");
 
 program.on("--help", () => {
   console.log();

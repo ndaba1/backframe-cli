@@ -49,9 +49,6 @@
         },
         "firestore": {
             "deps": [{
-                "name": "firebase/admin",
-                "version": "^7.4.5"
-            }, {
                 "name": "firebase/firestore",
                 "version": "^7.4.5"
             }]
@@ -88,6 +85,12 @@
         "sendgrid": {
             "deps": [{
                 "name": "@sendgrid/mail",
+                "version": "^7.4.5"
+            }]
+        },
+        "firebase": {
+            "deps": [{
+                "name": "@firebase/admin",
                 "version": "^7.4.5"
             }]
         }
